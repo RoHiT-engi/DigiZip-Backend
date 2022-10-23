@@ -1,0 +1,29 @@
+{
+  "name": "digizip-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.1",
+    "mongoose": "^6.6.4",
+    "nodemon": "^2.0.20"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RoHiT-engi/DigiZip-Backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/RoHiT-engi/DigiZip-Backend/issues"
+  },
+  "homepage": "https://github.com/RoHiT-engi/DigiZip-Backend#readme"
+}
