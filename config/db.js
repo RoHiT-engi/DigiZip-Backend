@@ -2,7 +2,7 @@
 const Mongoose = require('mongoose');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 const connectDB = async () => {
-    const MONGO_URI = 'mongodb+srv://nvichare9:%23Rohit112@cluster0.yj1pgfd.mongodb.net/DigizipDB?retryWrites=true&w=majority'
+    const MONGO_URI = process.env.MONGO_URI;
     try {
       const conn = await Mongoose.connect(MONGO_URI, {
         useUnifiedTopology: true,

@@ -1,4 +1,6 @@
-import Mongoose from "mongoose";
+
+const Mongoose = require("mongoose");
+
 
 const UserSchema = new Mongoose.Schema({
     email: {
@@ -11,9 +13,14 @@ const UserSchema = new Mongoose.Schema({
         required: true,
         ref: 'User',
     },
+    // usertoken: {
+    //     type: Object,
+    //     required: true,
+    //     ref: 'User',
+    // }
 },{
     timestamps: true,
   });
 
 const User = Mongoose.model('User', UserSchema);
-export default User;
+module.exports =  User;
