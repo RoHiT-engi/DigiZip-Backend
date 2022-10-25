@@ -1,12 +1,15 @@
-import Mongoose from "mongoose";
+// import Mongoose from "mongoose";
+const Mongoose = require('mongoose');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 const connectDB = async () => {
-    const MONGO_URI = 'mongodb+srv://Rohit123:Rohit123@fetchbookback.hidvq.mongodb.net/myFirstDatabase?retryWrites=true&w=majority'
+    const MONGO_URI = 'mongodb+srv://nvichare9:%23Rohit112@cluster0.yj1pgfd.mongodb.net/DigizipDB?retryWrites=true&w=majority'
     try {
-      const conn = Mongoose.connect(MONGO_URI, {
-          useUnifiedTopology: true,
-          useNewUrlParser: true,
-          // useCreateIndex: true,
+      const conn = await Mongoose.connect(MONGO_URI, {
+        useUnifiedTopology: true,
+        useNewUrlParser: true,
+        serverApi: ServerApiVersion.v1,
       })
+  
       console.log(`MongoDB Connected: ${conn.connection.host}`)
     } catch (error) {
       console.error(`Error: ${error.message}`)
@@ -14,4 +17,4 @@ const connectDB = async () => {
     }
   }
   
-  export default connectDB;
+  module.exports = connectDB
