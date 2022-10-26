@@ -13,11 +13,6 @@ const UserSchema = new Mongoose.Schema({
         required: true,
         ref: 'User',
     },
-    // usertoken: {
-    //     type: Object,
-    //     required: true,
-    //     ref: 'User',
-    // }
 },{
     timestamps: true,
   });
