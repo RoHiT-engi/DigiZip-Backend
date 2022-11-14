@@ -41,6 +41,15 @@ router.post('/register', async (req, res) => {
 })
 
 
+router.post('/check', async (req, res) => {
+  const emailExist = await User.findOne({"email": req.body.email});
+  if(emailExist) {
+    res.status(400).send('User exists');
+  }else{
+    res.status(200).send('User do not exists');
+  }
+})
+
 
 
 
