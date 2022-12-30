@@ -13,6 +13,16 @@ const UserSchema = new Mongoose.Schema({
         required: true,
         ref: 'User',
     },
+    verified: {
+        type: Boolean,
+        required: true,
+        ref: 'User',
+    },
+    otp: {
+        type: String,
+        required: true,
+        ref: 'User',
+    }
 },{
     timestamps: true,
   });
