@@ -7,7 +7,7 @@ const User = require('../models/UserData')
 const nodemailer = require('nodemailer');
 const otpGenerator = require('otp-generator') ;
 const asyncHandler = require('express-async-handler')
-
+// const registerSchema = require('../validation/registerValidation');
 
 
 const adduser = asyncHandler(async (req, res) => {
@@ -44,14 +44,14 @@ const adduser = asyncHandler(async (req, res) => {
             res.status(400).send(error);
           } else {
             console.log('Email sent: ' + info.response);
-            const { error } = await registerSchema.validateAsync(req.body);
+            // const { error } = await registerSchema.validateAsync(req.body);
         
-            if (error) {
-              res.status(400).send(error.details[0].message);
-            }  else {
+            // if (error) {
+            //   res.status(400).send(error.details[0].message);
+            // }  else {
               const saveUser = await user.save();
               res.status(200).send("user created");
-            }
+            // }
           }
         });
     
