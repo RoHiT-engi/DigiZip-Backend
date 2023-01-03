@@ -5,7 +5,7 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser');
 const {config} = require('dotenv')
-const connectDB = require('./config/db.js')
+const connectDB = require('./functions/config/db.js')
 
 
 
@@ -31,4 +31,4 @@ app.listen(port, ()=>{
     console.log(`server is listening on port ${port} ...clt+c to stop`)
 })
 
-app.use('/api/auth', require('./routes/auth.js'));
+app.use('/api/auth', require('./functions/routes/auth.js'));
