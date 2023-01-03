@@ -1,0 +1,151 @@
+[debug] [2023-01-03T18:11:59.668Z] ----------------------------------------------------------------------
+[debug] [2023-01-03T18:11:59.671Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\91922\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve --only functions,hosting
+[debug] [2023-01-03T18:11:59.671Z] CLI Version:   11.19.0
+[debug] [2023-01-03T18:11:59.672Z] Platform:      win32
+[debug] [2023-01-03T18:11:59.672Z] Node Version:  v18.12.1
+[debug] [2023-01-03T18:11:59.673Z] Time:          Tue Jan 03 2023 23:41:59 GMT+0530 (India Standard Time)
+[debug] [2023-01-03T18:11:59.673Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2023-01-03T18:11:59.803Z] Field ".functions" in "firebase.json" is possibly invalid: should be object
+[debug] [2023-01-03T18:11:59.804Z] Object ".functions[0]" in "firebase.json" has unknown property: {"additionalProperty":"rewrites"}
+[debug] [2023-01-03T18:11:59.804Z] Field ".functions" in "firebase.json" is possibly invalid: should match some schema in anyOf
+[debug] [2023-01-03T18:11:59.811Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2023-01-03T18:11:59.811Z] > authorizing via signed-in user (nvichare9@gmail.com)
+[debug] [2023-01-03T18:11:59.811Z] [iam] checking project digizip-3eafe for permissions ["firebase.projects.get"]
+[debug] [2023-01-03T18:11:59.813Z] >>> [apiv2][query] POST https://cloudresourcemanager.googleapis.com/v1/projects/digizip-3eafe:testIamPermissions [none]
+[debug] [2023-01-03T18:11:59.814Z] >>> [apiv2][(partial)header] POST https://cloudresourcemanager.googleapis.com/v1/projects/digizip-3eafe:testIamPermissions x-goog-quota-user=projects/digizip-3eafe
+[debug] [2023-01-03T18:11:59.814Z] >>> [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/digizip-3eafe:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2023-01-03T18:12:01.352Z] <<< [apiv2][status] POST https://cloudresourcemanager.googleapis.com/v1/projects/digizip-3eafe:testIamPermissions 200
+[debug] [2023-01-03T18:12:01.353Z] <<< [apiv2][body] POST https://cloudresourcemanager.googleapis.com/v1/projects/digizip-3eafe:testIamPermissions {"permissions":["firebase.projects.get"]}
+[debug] [2023-01-03T18:12:01.354Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe [none]
+[debug] [2023-01-03T18:12:01.762Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe 200
+[debug] [2023-01-03T18:12:01.762Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe {"projectId":"digizip-3eafe","projectNumber":"377607837553","displayName":"DigiZip","name":"projects/digizip-3eafe","resources":{"hostingSite":"digizip-3eafe"},"state":"ACTIVE","etag":"1_acc96db8-88df-43ec-abef-32c93ff9b776"}
+[warn] !  Your requested "node" version "16" doesn't match your global version "18". Using node@18 from host. {"metadata":{"emulator":{"name":"functions"},"message":"Your requested \"node\" version \"16\" doesn't match your global version \"18\". Using node@18 from host."}}
+[debug] [2023-01-03T18:12:01.795Z] defaultcredentials: writing to file C:\Users\91922\AppData\Roaming\firebase\nvichare9_gmail_com_application_default_credentials.json
+[debug] [2023-01-03T18:12:01.796Z] >>> [apiv2][query] GET https://firebasehosting.googleapis.com/v1beta1/projects/digizip-3eafe/sites 
+[debug] [2023-01-03T18:12:01.799Z] Setting GAC to C:\Users\91922\AppData\Roaming\firebase\nvichare9_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\91922\\AppData\\Roaming\\firebase\\nvichare9_gmail_com_application_default_credentials.json"}}
+[debug] [2023-01-03T18:12:01.800Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe/adminSdkConfig [none]
+[debug] [2023-01-03T18:12:02.248Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe/adminSdkConfig 200
+[debug] [2023-01-03T18:12:02.249Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe/adminSdkConfig {"projectId":"digizip-3eafe","storageBucket":"digizip-3eafe.appspot.com"}
+[debug] [2023-01-03T18:12:03.972Z] <<< [apiv2][status] GET https://firebasehosting.googleapis.com/v1beta1/projects/digizip-3eafe/sites 200
+[debug] [2023-01-03T18:12:03.972Z] <<< [apiv2][body] GET https://firebasehosting.googleapis.com/v1beta1/projects/digizip-3eafe/sites {"sites":[{"name":"projects/digizip-3eafe/sites/digizip-3eafe","defaultUrl":"https://digizip-3eafe.web.app","appId":"1:377607837553:web:550f288928bcb7232d48d0","type":"DEFAULT_SITE"}]}
+[debug] [2023-01-03T18:12:03.972Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe/webApps/1:377607837553:web:550f288928bcb7232d48d0/config [none]
+[debug] [2023-01-03T18:12:05.218Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe/webApps/1:377607837553:web:550f288928bcb7232d48d0/config 200
+[debug] [2023-01-03T18:12:05.218Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe/webApps/1:377607837553:web:550f288928bcb7232d48d0/config {"projectId":"digizip-3eafe","appId":"1:377607837553:web:550f288928bcb7232d48d0","storageBucket":"digizip-3eafe.appspot.com","apiKey":"AIzaSyD-N5JAHDRAX9DHpPhSzL_hRmZwT3Lr8ww","authDomain":"digizip-3eafe.firebaseapp.com","messagingSenderId":"377607837553","measurementId":"G-S48M70D6E8"}
+[debug] [2023-01-03T18:12:05.234Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe [none]
+[debug] [2023-01-03T18:12:05.848Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe 200
+[debug] [2023-01-03T18:12:05.848Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/digizip-3eafe {"projectId":"digizip-3eafe","projectNumber":"377607837553","displayName":"DigiZip","name":"projects/digizip-3eafe","resources":{"hostingSite":"digizip-3eafe"},"state":"ACTIVE","etag":"1_acc96db8-88df-43ec-abef-32c93ff9b776"}
+[info] i  functions: Watching "C:\Users\91922\DigiZip-Backend\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\91922\\DigiZip-Backend\\functions\" for Cloud Functions..."}}
+[info] i  hosting[digizip-3eafe]: Serving hosting files from: public {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mpublic\u001b[22m"}}
+[info] +  hosting[digizip-3eafe]: Local server: http://localhost:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://localhost:5000\u001b[22m\u001b[24m"}}
+[debug] [2023-01-03T18:12:05.878Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2023-01-03T18:12:08.618Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.18.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^0.2.0"
+  },
+  "private": true
+}
+[debug] [2023-01-03T18:12:08.618Z] Building nodejs source
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2023-01-03T18:12:08.624Z] Could not find functions.yaml. Must use http discovery
+[debug] [2023-01-03T18:12:09.009Z] Serving at port 9005
+
+[debug] [2023-01-03T18:12:09.108Z] Got response from /__/functions.yaml Failed to generate manifest from function source: Error: Cannot find module './functions/routes/auth.js'
+Require stack:
+- C:\Users\91922\DigiZip-Backend\functions\index.js
+- C:\Users\91922\DigiZip-Backend\functions\node_modules\firebase-functions\lib\runtime\loader.js
+- C:\Users\91922\DigiZip-Backend\functions\node_modules\firebase-functions\lib\bin\firebase-functions.js
+[debug] [2023-01-03T18:12:09.112Z] Failed to parse functions.yamlincomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line at line 1, column 56:
+     ... fest from function source: Error: Cannot find module './function ... 
+                                         ^ {"name":"YAMLException","reason":"incomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line","mark":{"name":null,"buffer":"Failed to generate manifest from function source: Error: Cannot find module './functions/routes/auth.js'\nRequire stack:\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\index.js\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\node_modules\\firebase-functions\\lib\\runtime\\loader.js\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\node_modules\\firebase-functions\\lib\\bin\\firebase-functions.js\n\u0000","position":55,"line":0,"column":55},"message":"incomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line at line 1, column 56:\n     ... fest from function source: Error: Cannot find module './function ... \n                                         ^"}
+[debug] [2023-01-03T18:12:09.120Z] shutdown requested via /__/quitquitquit
+
+[error] !!  functions: Failed to load function definition from source: FirebaseError: Failed to load function definition from source: Failed to generate manifest from function source: Error: Cannot find module './functions/routes/auth.js'
+Require stack:
+- C:\Users\91922\DigiZip-Backend\functions\index.js
+- C:\Users\91922\DigiZip-Backend\functions\node_modules\firebase-functions\lib\runtime\loader.js
+- C:\Users\91922\DigiZip-Backend\functions\node_modules\firebase-functions\lib\bin\firebase-functions.js {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: FirebaseError: Failed to load function definition from source: Failed to generate manifest from function source: Error: Cannot find module './functions/routes/auth.js'\nRequire stack:\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\index.js\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\node_modules\\firebase-functions\\lib\\runtime\\loader.js\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\node_modules\\firebase-functions\\lib\\bin\\firebase-functions.js"}}
+[debug] [2023-01-03T18:12:34.064Z] File C:\Users\91922\DigiZip-Backend\functions\package.json changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\91922\\DigiZip-Backend\\functions\\package.json changed, reloading triggers"}}
+[debug] [2023-01-03T18:12:35.077Z] Validating nodejs source
+[warn] !  functions: package.json indicates an outdated version of firebase-functions. Please upgrade using npm install --save firebase-functions@latest in your functions directory. 
+[warn] !  functions: Please note that there will be breaking changes when you upgrade. 
+[debug] [2023-01-03T18:12:36.684Z] > [functions] package.json contents: {
+  "name": "functions",
+  "description": "Cloud Functions for Firebase",
+  "scripts": {
+    "lint": "eslint .",
+    "serve": "firebase emulators:start --only functions",
+    "shell": "firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "16"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-admin": "^10.0.2",
+    "firebase-functions": "^3.18.0",
+    "@hapi/joi": "^17.1.1",
+    "bcrypt-nodejs": "0.0.3",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "express-async-handler": "^1.2.0",
+    "firebase": "^9.12.1",
+    "mongoose": "^6.7.0",
+    "nodemailer": "^6.8.0",
+    "nodemon": "^2.0.20",
+    "otp-generator": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "firebase-functions-test": "^0.2.0"
+  },
+  "private": true
+}
+[debug] [2023-01-03T18:12:36.684Z] Building nodejs source
+[info] i  functions: Loaded environment variables from .env. 
+[debug] [2023-01-03T18:12:36.687Z] Could not find functions.yaml. Must use http discovery
+[debug] [2023-01-03T18:12:37.100Z] Serving at port 9005
+
+[debug] [2023-01-03T18:12:37.262Z] Got response from /__/functions.yaml Failed to generate manifest from function source: Error: Cannot find module './functions/routes/auth.js'
+Require stack:
+- C:\Users\91922\DigiZip-Backend\functions\index.js
+- C:\Users\91922\DigiZip-Backend\functions\node_modules\firebase-functions\lib\runtime\loader.js
+- C:\Users\91922\DigiZip-Backend\functions\node_modules\firebase-functions\lib\bin\firebase-functions.js
+[debug] [2023-01-03T18:12:37.262Z] Failed to parse functions.yamlincomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line at line 1, column 56:
+     ... fest from function source: Error: Cannot find module './function ... 
+                                         ^ {"name":"YAMLException","reason":"incomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line","mark":{"name":null,"buffer":"Failed to generate manifest from function source: Error: Cannot find module './functions/routes/auth.js'\nRequire stack:\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\index.js\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\node_modules\\firebase-functions\\lib\\runtime\\loader.js\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\node_modules\\firebase-functions\\lib\\bin\\firebase-functions.js\n\u0000","position":55,"line":0,"column":55},"message":"incomplete explicit mapping pair; a key node is missed; or followed by a non-tabulated empty line at line 1, column 56:\n     ... fest from function source: Error: Cannot find module './function ... \n                                         ^"}
+[debug] [2023-01-03T18:12:37.272Z] shutdown requested via /__/quitquitquit
+
+[error] !!  functions: Failed to load function definition from source: FirebaseError: Failed to load function definition from source: Failed to generate manifest from function source: Error: Cannot find module './functions/routes/auth.js'
+Require stack:
+- C:\Users\91922\DigiZip-Backend\functions\index.js
+- C:\Users\91922\DigiZip-Backend\functions\node_modules\firebase-functions\lib\runtime\loader.js
+- C:\Users\91922\DigiZip-Backend\functions\node_modules\firebase-functions\lib\bin\firebase-functions.js {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: FirebaseError: Failed to load function definition from source: Failed to generate manifest from function source: Error: Cannot find module './functions/routes/auth.js'\nRequire stack:\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\index.js\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\node_modules\\firebase-functions\\lib\\runtime\\loader.js\n- C:\\Users\\91922\\DigiZip-Backend\\functions\\node_modules\\firebase-functions\\lib\\bin\\firebase-functions.js"}}
