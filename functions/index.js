@@ -11,22 +11,22 @@ const functions = require("firebase-functions");
 const json = require('express');
 const urlencoded = require('express');
 const express = require('express')
-// const cors = require('cors')
-// const bodyParser = require('body-parser');
-// const {config} = require('dotenv')
-// const connectDB = require('./functions/config/db.js')
+const cors = require('cors')
+const bodyParser = require('body-parser');
+const {config} = require('dotenv')
+const connectDB = require('.//config/db.js')
 
 
 
 // configs area
-// config()
+config()
 const app = express()
 const port = 5000 
-// // app.use(cors())
-// app.use(bodyParser.json())
-// app.use(json())
-// app.use(urlencoded({ extended: false }))
-// connectDB()
+app.use(cors())
+app.use(bodyParser.json())
+app.use(json())
+app.use(urlencoded({ extended: false }))
+connectDB()
 
 
 
@@ -38,6 +38,6 @@ app.get('/',(req,res)=>{
 
 
 
-app.use('/api/auth', require('./functions/routes/auth.js'));
+app.use('/api/auth', require('.//routes/auth.js'));
 
 exports.api = functions.https.onRequest(app);
