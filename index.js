@@ -1,4 +1,3 @@
-const functions = require("firebase-functions");
 
 // // Create and deploy your first functions
 // // https://firebase.google.com/docs/functions/get-started
@@ -40,4 +39,6 @@ app.get('/',(req,res)=>{
 
 app.use('/api/auth', require('.//routes/auth.js'));
 
-exports.api = functions.https.onRequest(app);
+app.listen(port,()=>{"server is running on port 5000"})
+
+// exports.api = functions.https.onRequest(app);

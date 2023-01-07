@@ -41,3 +41,5 @@ router.get("/validateToken", (req, res) => {
         return res.status(401).send(error);
     }
 });
+
+// module.exports = router;
