@@ -9,7 +9,8 @@ const registerSchema = Joi.object({
 })
 
 
-router.route('/register').post(adduser).get(getuser);
+router.route('/register').post(adduser)
+router.route('/getuser').get(getuser);
 router.route('/check').post(checkotp);
 
 

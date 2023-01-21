@@ -13,18 +13,19 @@ const express = require('express')
 const cors = require('cors')
 const bodyParser = require('body-parser');
 const {config} = require('dotenv')
-const connectDB = require('.//config/db.js')
+const connectDB = require('./config/db.js')
 
 
 
 // configs area
+
 config()
 const app = express()
 const port = 5000 
 app.use(cors())
-app.use(bodyParser.json())
 app.use(json())
-app.use(urlencoded({ extended: false }))
+app.use(urlencoded({ extended: true }))
+app.use(bodyParser.json())
 connectDB()
 
 
@@ -37,8 +38,13 @@ app.get('/',(req,res)=>{
 
 
 
-app.use('/api/auth', require('.//routes/auth.js'));
+app.use('/auth', require('./routes/auth.js'));
 
-app.listen(port,()=>{"server is running on port 5000"})
+app.get('/test',(req,res)=>{
+    res.send("<h1>test route</h1>")
+})
+app.listen(port, ()=>{
+    console.log(`server is listening on port ${port} ...clt+c to stop`)
+})
 
 // exports.api = functions.https.onRequest(app);
