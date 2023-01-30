@@ -40,6 +40,10 @@ app.get('/',(req,res)=>{
 
 app.use('/auth', require('./routes/auth.js'));
 
+app.use('/file', require('./routes/File.js'));
+
+app.use('/preset', require('./routes/Preset.js'));
+
 app.get('/test',(req,res)=>{
     res.send("<h1>test route</h1>")
 })

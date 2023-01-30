@@ -14,8 +14,6 @@ const adduser = asyncHandler(async (req, res) => {
   res.header('Access-Control-Allow-Methods', 'POST');
     const emailExist = await User.findOne({"email": req.body.email});
     const aadharExist = await User.findOne({"aadhaar": req.body.aadhaar});
-    console.log(req.body);
-    console.log(emailExist, aadharExist);
     if(emailExist!=null || aadharExist!=null) {
       console.log('Email or aadhar already exists');
       res.status(400).send('Email or aadhar already exists');
@@ -80,7 +78,6 @@ const checkotp = asyncHandler(async (req, res) => {
 
 const getuser = asyncHandler(async (req, res) => {
     const email = req.query.email+'%c ';
-    console.log(email,'background: #222; color: red');
     const user = await User.findOne({"email": email});
     if(user!=null){
       res.status(200).send(user);
