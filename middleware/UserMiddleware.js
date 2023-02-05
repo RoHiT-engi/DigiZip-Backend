@@ -15,7 +15,7 @@ const adduser = asyncHandler(async (req, res) => {
     const emailExist = await User.findOne({"email": req.body.email});
     const aadharExist = await User.findOne({"aadhaar": req.body.aadhaar});
     if(emailExist!=null || aadharExist!=null) {
-      console.log('Email or aadhar already exists');
+      // console.log('Email or aadhar already exists');
       res.status(400).send('Email or aadhar already exists');
     } else{
       const otp = otpGenerator.generate(6, { upperCase: false, specialChars: false, alphabets: false });
@@ -70,6 +70,8 @@ const checkotp = asyncHandler(async (req, res) => {
         emailExist.verified = true;
         emailExist.save();
         res.status(200).send('User verified');
+      }else{
+        res.status(400).send('Wrong otp');
       }
     }else{
       res.status(400).send('User do not exists');
@@ -77,7 +79,7 @@ const checkotp = asyncHandler(async (req, res) => {
   });
 
 const getuser = asyncHandler(async (req, res) => {
-    const email = req.query.email+'%c ';
+    const email = req.query.email;
     const user = await User.findOne({"email": email});
     if(user!=null){
       res.status(200).send(user);

@@ -18,6 +18,34 @@ const FileSchema = new Mongoose.Schema({
         required: true,
         ref: 'File',
     },
+    password: {
+        type: String,
+        required: true,
+        ref: 'File',
+    },
+    access: {
+        type : Array,
+        ref: 'File',
+        email :{
+            type: String,
+            ref: 'File',
+        },
+        read :{
+            type: Boolean,
+            ref: 'File',
+            default: false
+        },
+        download :{
+            type: Boolean,
+            ref: 'File',
+            default: false
+        },
+        time: {
+            type: Number,
+            ref: 'File',
+            default: 0
+        },
+    },
     metadata: {
         title :{
             type: String,
@@ -25,8 +53,9 @@ const FileSchema = new Mongoose.Schema({
             ref: 'File',
         },
         size :{
-            type: String,
+            type: Number,
             required: true,
+            default: 0,
             ref: 'File',
         },
         creationDate :{
@@ -37,6 +66,7 @@ const FileSchema = new Mongoose.Schema({
         lastModifiedDate :{
             type: String,
             required: true,
+            default: 'Not Available',
             ref: 'File',
         }
     }
