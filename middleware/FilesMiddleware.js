@@ -2,6 +2,8 @@ const File = require('../models/FileData');
 const User = require('../models/UserData');
 const asyncHandler = require('express-async-handler');
 
+// AddFile
+// Tested
 const addfile = asyncHandler(async (req, res) => {
     
   res.header('Access-Control-Allow-Methods', 'POST');
@@ -37,6 +39,8 @@ const addfile = asyncHandler(async (req, res) => {
 
 })
 
+// GetFiles
+// Tested
 const getfiles = asyncHandler(async (req, res) => {
     res.header('Access-Control-Allow-Methods', 'GET');
     try{
@@ -52,6 +56,8 @@ const getfiles = asyncHandler(async (req, res) => {
     }
 })
 
+// DeleteFile
+// Tested
 const deleteFile = asyncHandler(async (req, res) => {
     // res.header('Access-Control-Allow-Methods', 'DELETE');
     try{
@@ -72,6 +78,8 @@ const deleteFile = asyncHandler(async (req, res) => {
     }
 })
 
+// RevokeAccess
+// Tested
 const revokeaccess = asyncHandler(async (req, res) => {
     // res.header('Access-Control-Allow-Methods', 'DELETE');
     // console.log(res);
@@ -93,6 +101,50 @@ const revokeaccess = asyncHandler(async (req, res) => {
         }else{
             res.status(400).send("file not found");
         }
+    }catch(e){
+        res.status(400).send(e);
+    }
+})
+
+// GetAccessFiles
+// NOT Tested
+const getAccessFiles = asyncHandler(async (req, res) => {
+    // res.header('Access-Control-Allow-Methods', 'GET');
+    try{
+        const Email = User.findOne({"email": req.query.email});
+        const File_cid = File.find({"access": {$all: [{"email": req.query.email}]}});
+        if(Email!=null && File_cid!=null){
+            res.status(200).send(File_cid);
+        }else{
+            res.status(400).send("file not found");
+        }
+    }catch(e){
+        res.status(400).send(e);
+    }
+})
+
+// Grant Access
+// NOT Tested
+const grantAccess = asyncHandler(async (req, res) => {
+    // res.header('Access-Control-Allow-Methods', 'POST');
+    try{
+        const Email = User.findOne({"email": req.body.email});
+        const File_cid = File.findOne({"CID": req.body.file_CID});
+        if(Email!=null && File_cid!=null){
+            var arr = File_cid.access;
+            arr.push({
+                "email": req.body.email,
+                "read": req.body.read,
+                "download" : req.body.download,
+                "time": req.body.time
+            });
+            File_cid.access = arr;
+            await File_cid.save();
+            res.status(200).send("access granted");
+        }else{
+            res.status(400).send("file not found");
+        }
+
     }catch(e){
         res.status(400).send(e);
     }

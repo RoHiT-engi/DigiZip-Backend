@@ -9,7 +9,8 @@ const otpGenerator = require('otp-generator') ;
 const asyncHandler = require('express-async-handler')
 // const registerSchema = require('../validation/registerValidation');
 
-
+// add user
+// tested
 const adduser = asyncHandler(async (req, res) => {
   res.header('Access-Control-Allow-Methods', 'POST');
     const emailExist = await User.findOne({"email": req.body.email});
@@ -62,6 +63,8 @@ const adduser = asyncHandler(async (req, res) => {
     }}
 });
 
+// check otp
+// tested
 const checkotp = asyncHandler(async (req, res) => {
     const emailExist = await User.findOne({"email": req.body.email});
     if(emailExist!=null) {
@@ -78,6 +81,8 @@ const checkotp = asyncHandler(async (req, res) => {
     }
   });
 
+// get user
+// tested
 const getuser = asyncHandler(async (req, res) => {
     const email = req.query.email;
     const user = await User.findOne({"email": email});
