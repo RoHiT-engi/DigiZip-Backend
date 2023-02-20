@@ -79,7 +79,7 @@ const checkotp = asyncHandler(async (req, res) => {
     }else{
       res.status(400).send('User do not exists');
     }
-  });
+});
 
 // get user
 // tested

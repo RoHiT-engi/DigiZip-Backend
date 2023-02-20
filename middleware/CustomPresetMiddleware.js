@@ -2,6 +2,8 @@ const User = require('../models/UserData');
 const Preset = require('../models/CustomPresets');
 const asyncHandler = require('express-async-handler');
 
+// Add Preset
+// not Tested
 const addPreset = asyncHandler(async (req, res) => {
     const email = User.findOne({"email": req.body.email});
     const Name_Exist = Preset.findOne({"email": req.body.email, "Preset_name": req.body.Preset_name});

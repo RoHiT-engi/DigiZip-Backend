@@ -26,7 +26,7 @@ const FileSchema = new Mongoose.Schema({
     access: {
         type : Array,
         ref: 'File',
-        email :{
+        org_hash :{
             type: String,
             ref: 'File',
         },
@@ -41,10 +41,20 @@ const FileSchema = new Mongoose.Schema({
             default: false
         },
         time: {
-            type: Number,
+            type: String,
             ref: 'File',
             default: 0
         },
+        importance_lvl: {
+            type: String,
+            ref: 'File',
+            default: 'low'
+        },
+        status :{
+            type: Boolean,
+            ref: 'File',
+            default: false
+        }
     },
     metadata: {
         title :{

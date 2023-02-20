@@ -1,5 +1,6 @@
 const File = require('../models/FileData');
 const User = require('../models/UserData');
+const Org = require('../models/Org');
 const asyncHandler = require('express-async-handler');
 
 // AddFile
@@ -84,12 +85,12 @@ const revokeaccess = asyncHandler(async (req, res) => {
     // res.header('Access-Control-Allow-Methods', 'DELETE');
     // console.log(res);
     try{
-        const email = await User.findOne({"email":req.body.email});
         const CIDexist = await File.findOne({"CID": req.body.file_CID});
-        if(email!=null && CIDexist!=null){
+        const chash = await Org.findOne({"generated_hash": req.body.hash});
+        if( CIDexist!=null && chash!=null){
             var arr = CIDexist.access;
             for(var i=0;i<arr.length;i++){
-                if(arr[i].email==req.body.email){
+                if(arr[i].org_hash==req.body.hash){
                     arr.splice(i,1);
                     break;
                 }
@@ -106,14 +107,15 @@ const revokeaccess = asyncHandler(async (req, res) => {
     }
 })
 
-// GetAccessFiles
+// GetAccess granted Files
 // NOT Tested
 const getAccessFiles = asyncHandler(async (req, res) => {
     // res.header('Access-Control-Allow-Methods', 'GET');
     try{
-        const Email = User.findOne({"email": req.query.email});
-        const File_cid = File.find({"access": {$all: [{"email": req.query.email}]}});
-        if(Email!=null && File_cid!=null){
+        const org = User.findOne({"generated_hash": req.query.hash});
+        const File_cid = File.find({"access": {$all: [{"org_hash": req.query.hash}]}});
+
+        if(org!=null && File_cid!=null){
             res.status(200).send(File_cid);
         }else{
             res.status(400).send("file not found");
@@ -128,15 +130,17 @@ const getAccessFiles = asyncHandler(async (req, res) => {
 const grantAccess = asyncHandler(async (req, res) => {
     // res.header('Access-Control-Allow-Methods', 'POST');
     try{
-        const Email = User.findOne({"email": req.body.email});
+        const org = Org.findOne({"generated_hash": req.body.hash});
         const File_cid = File.findOne({"CID": req.body.file_CID});
-        if(Email!=null && File_cid!=null){
+        if(org!=null && File_cid!=null){
             var arr = File_cid.access;
             arr.push({
-                "email": req.body.email,
+                "org_hash": req.body.hash,
                 "read": req.body.read,
                 "download" : req.body.download,
-                "time": req.body.time
+                "time": req.body.time,
+                "importance_lvl" : req.body.importance_lvl,
+                "status": req.body.status
             });
             File_cid.access = arr;
             await File_cid.save();
@@ -149,5 +153,5 @@ const grantAccess = asyncHandler(async (req, res) => {
         res.status(400).send(e);
     }
 })
-module.exports = {addfile, getfiles, deleteFile, revokeaccess}
+module.exports = {addfile, getfiles, deleteFile, revokeaccess, getAccessFiles, grantAccess}
 
