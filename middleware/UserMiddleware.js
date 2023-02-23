@@ -10,15 +10,13 @@ const asyncHandler = require('express-async-handler')
 // const registerSchema = require('../validation/registerValidation');
 
 // add user
-// tested
+// not tested
 const adduser = asyncHandler(async (req, res) => {
   res.header('Access-Control-Allow-Methods', 'POST');
     const emailExist = await User.findOne({"email": req.body.email});
     const aadharExist = await User.findOne({"aadhaar": req.body.aadhaar});
-    if(emailExist!=null || aadharExist!=null) {
+    if(emailExist._executionStack==null && aadharExist._executionStack==null) {
       // console.log('Email or aadhar already exists');
-      res.status(400).send('Email or aadhar already exists');
-    } else{
       const otp = otpGenerator.generate(6, { upperCase: false, specialChars: false, alphabets: false });
     const user = new User({
         email : req.body.email,
@@ -60,7 +58,9 @@ const adduser = asyncHandler(async (req, res) => {
     
     } catch (error) {
         res.status(400).send(error);
-    }}
+    }}else{
+      res.status(400).send('Email or aadhar already exists');
+    }
 });
 
 // check otp

@@ -7,10 +7,10 @@ const {makeOrg,
 
 // not tested
 
-router.route('/make').post(makeOrg)
-router.route('/get').get(getOrg);
-router.route('/del').delete(deleteOrg);
-router.route('/checkotp').post(checkOtp);
+router.route('/make').post(makeOrg)   // tested
+router.route('/get').get(getOrg);  // tested
+router.route('/del').delete(deleteOrg);     // tested
+router.route('/checkotp').post(checkOtp);   // tested
 
 
 

@@ -6,11 +6,13 @@ const UserSchema = new Mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true,
         ref: 'User',
     },
     aadhaar: {
         type: String,
         required: true,
+        unique: true,
         ref: 'User',
     },
     verified: {

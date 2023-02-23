@@ -6,16 +6,19 @@ const FileSchema = new Mongoose.Schema({
     email: {
         type: String,
         required: true,
+        unique: true,
         ref: 'File',
     },
     CID: {
         type: String,
         required: true,
+        unique: true,
         ref: 'File',
     },
     FileHash: {
         type: String,
         required: true,
+        unique: true,
         ref: 'File',
     },
     password: {
@@ -28,6 +31,7 @@ const FileSchema = new Mongoose.Schema({
         ref: 'File',
         org_hash :{
             type: String,
+            unique: true,
             ref: 'File',
         },
         read :{

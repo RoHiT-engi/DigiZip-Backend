@@ -10,10 +10,9 @@ const addfile = asyncHandler(async (req, res) => {
   res.header('Access-Control-Allow-Methods', 'POST');
   const CIDexist = await File.findOne({"CID": req.body.file_CID});
   const FileHash = await File.findOne({"FileHash": req.body.FileHash});
-  const FileTitle = await File.find({"email": req.body.email,"metadata.title": req.body.metadata.title});
   const Email = await User.findOne({"email": req.body.email});
-
-    if(CIDexist!=null || FileHash!=null || Email!=null || FileTitle!=null) {
+    console.log(CIDexist);
+    if(CIDexist==null && FileHash==null && Email==null) {
         const file = new File({
             email : req.body.email,
             CID : req.body.file_CID,
@@ -40,7 +39,7 @@ const addfile = asyncHandler(async (req, res) => {
 
 })
 
-// GetFiles
+// Get Files in curr account
 // Tested
 const getfiles = asyncHandler(async (req, res) => {
     res.header('Access-Control-Allow-Methods', 'GET');
@@ -63,7 +62,7 @@ const deleteFile = asyncHandler(async (req, res) => {
     // res.header('Access-Control-Allow-Methods', 'DELETE');
     try{
     const email = await User.findOne({"email": req.query.email});
-    const FileTitle = await File.find({"email": req.query.email,"metadata.title": req.query.title});
+    const FileTitle = await File.find({"email": req.query.email,"CID": req.query.cid});
     if(email!=null && FileTitle!=null){
         try{
             await File.deleteOne({"_id": FileTitle[0]._id});
@@ -85,7 +84,7 @@ const revokeaccess = asyncHandler(async (req, res) => {
     // res.header('Access-Control-Allow-Methods', 'DELETE');
     // console.log(res);
     try{
-        const CIDexist = await File.findOne({"CID": req.body.file_CID});
+        const CIDexist = await File.findOne({"CID": req.body.cid});
         const chash = await Org.findOne({"generated_hash": req.body.hash});
         if( CIDexist!=null && chash!=null){
             var arr = CIDexist.access;
@@ -107,14 +106,13 @@ const revokeaccess = asyncHandler(async (req, res) => {
     }
 })
 
-// GetAccess granted Files
-// NOT Tested
+// GetAccess granted Files for an Org
+// Tested
 const getAccessFiles = asyncHandler(async (req, res) => {
     // res.header('Access-Control-Allow-Methods', 'GET');
     try{
-        const org = User.findOne({"generated_hash": req.query.hash});
-        const File_cid = File.find({"access": {$all: [{"org_hash": req.query.hash}]}});
-
+        const org = await Org.findOne({"generated_hash": req.query.hash});
+        const File_cid = await File.find({"access.org_hash": req.query.hash});
         if(org!=null && File_cid!=null){
             res.status(200).send(File_cid);
         }else{
@@ -126,13 +124,15 @@ const getAccessFiles = asyncHandler(async (req, res) => {
 })
 
 // Grant Access
-// NOT Tested
+// Tested
 const grantAccess = asyncHandler(async (req, res) => {
     // res.header('Access-Control-Allow-Methods', 'POST');
     try{
-        const org = Org.findOne({"generated_hash": req.body.hash});
-        const File_cid = File.findOne({"CID": req.body.file_CID});
-        if(org!=null && File_cid!=null){
+        const org = await Org.findOne({"generated_hash": req.body.hash});
+        const File_cid = await File.findOne({"CID": req.body.file_CID});
+        const check = await File.findOne({"CID": req.body.file_CID,"access.org_hash": req.body.hash});
+        console.log(File_cid+" "+org);
+        if(org!=null && File_cid!=null && check==null){
             var arr = File_cid.access;
             arr.push({
                 "org_hash": req.body.hash,
@@ -146,7 +146,7 @@ const grantAccess = asyncHandler(async (req, res) => {
             await File_cid.save();
             res.status(200).send("access granted");
         }else{
-            res.status(400).send("file not found");
+            res.status(400).send("file not found or access already granted");
         }
 
     }catch(e){

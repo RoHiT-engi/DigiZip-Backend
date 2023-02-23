@@ -11,17 +11,18 @@ const OrgSchema = new Mongoose.Schema({
     gst_no: {
         type: String,  
         required: true,
+        unique: true,
         ref: 'Org',
     },
     admin: {
         type: String,
         required: true,
+        unique: true,
         ref: 'Org',
     },
     accounts: {
         type: Array,
         ref: 'Org',
-        default: [],
         email :{
             type: String,
             ref: 'Org',
@@ -32,15 +33,22 @@ const OrgSchema = new Mongoose.Schema({
             default: 'low'
         }
     },
-    verified: {
+    verified_admin: {
         type: Boolean,
         required: true,
         default: false,
         ref: 'Org',
     },
+    verified_org: {
+        type: Boolean,
+        required: true,
+        default: false,
+        ref: 'Org',          
+    },
     generated_hash: {
         type: String,
         required: true,
+        unique: true,
         ref: 'Org',
     },
     otp: {
