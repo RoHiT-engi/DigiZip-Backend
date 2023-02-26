@@ -22,9 +22,9 @@ const makeOrg = asyncHandler(async (req, res) => {
                 "name": req.body.name,
                 "gst_no": req.body.gst_no,
                 "admin": req.body.admin,
-                "accounts": req.body.accounts,
-                "verified_admin": req.body.verified,
-                "verified_org": req.body.verified,
+                "accounts": [],
+                "verified_admin": false,
+                "verified_org": false,
                 "generated_hash": hashValue,
                 "otp": otp
             })

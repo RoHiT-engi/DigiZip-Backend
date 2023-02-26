@@ -22,6 +22,7 @@ const OrgSchema = new Mongoose.Schema({
     },
     accounts: {
         type: Array,
+        default: [],
         ref: 'Org',
         email :{
             type: String,
