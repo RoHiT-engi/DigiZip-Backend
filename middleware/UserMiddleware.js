@@ -6,7 +6,8 @@ const User = require('../models/UserData')
 // const Joi = require("@hapi/joi");
 const nodemailer = require('nodemailer');
 const otpGenerator = require('otp-generator') ;
-const asyncHandler = require('express-async-handler')
+const asyncHandler = require('express-async-handler');
+const Org = require('../models/Org');
 // const registerSchema = require('../validation/registerValidation');
 
 // add user
@@ -15,7 +16,8 @@ const adduser = asyncHandler(async (req, res) => {
   res.header('Access-Control-Allow-Methods', 'POST');
     const emailExist = await User.findOne({"email": req.body.email});
     const aadharExist = await User.findOne({"aadhaar": req.body.aadhaar});
-    if(emailExist==null && aadharExist==null) {
+    const isorg = await Org.findOne({"admin": req.body.email});
+    if(emailExist==null && aadharExist==null && isorg==null) {
       // console.log('Email or aadhar already exists');
       const otp = otpGenerator.generate(6, { upperCase: false, specialChars: false, alphabets: false });
     const user = new User({
@@ -59,7 +61,7 @@ const adduser = asyncHandler(async (req, res) => {
     } catch (error) {
         res.status(400).send(error);
     }}else{
-      res.status(400).send('Email or aadhar already exists');
+      res.status(400).send(isorg?'This account is already in Use':'Email or aadhar already exists');
     }
 });
 

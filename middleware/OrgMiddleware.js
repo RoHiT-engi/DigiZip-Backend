@@ -3,15 +3,23 @@ const asyncHandler = require('express-async-handler');
 const nodemailer = require('nodemailer');
 const otpGenerator = require('otp-generator') ;
 const crypto = require('crypto');
+const User = require('../models/UserData');
+
+// TODO : -
+
+
 
 // AddOrg
 // Tested
 const makeOrg = asyncHandler(async (req, res) => {
-    const gst = await Org.findOne({"gst_no": req.body.gst_no});
-    const name = await Org.findOne({"name": req.body.name});
-    const admin = await Org.findOne({"admin": req.body.admin});
-    console.log(gst);
-    if(gst==null && admin==null && name==null) {
+    const useracc = await User.findOne({"email": req.body.admin});
+    const hash = crypto.createHash('sha256', req.body.name)
+    .update(req.body.gst_no)
+    .update(req.body.admin)
+    .digest('hex');
+    const generatedHash = await Org.findOne({"generated_hash": hash});
+    console.log(useracc);
+    if(generatedHash==null && useracc==null) {
         try{
             const hashValue = crypto.createHash('sha256', req.body.name)
             .update(req.body.gst_no)
@@ -62,7 +70,7 @@ const makeOrg = asyncHandler(async (req, res) => {
             res.status(400).send(e);
         }
     }else{
-        res.status(400).send("user already registered");
+        res.status(400).send("Admin already registered");
     }
 });
 
@@ -124,6 +132,60 @@ const checkOtp = asyncHandler(async (req, res) => {
     }
 });
 
+// Update Admin Email
+// Tested
+const UpdateAdmin = asyncHandler(async (req, res) => {
+    const oldad = await Org.findOne({"admin": req.body.oldadmin});
+    if(oldad){
+        oldad.admin = req.body.newadmin;
+        await oldad.save();
+        res.status(200).send("updated");
+    }else{
+        res.status(400).send("Admin not found");
+    }
+});
+
+// Add Account
+// Tested
+const addAccount = asyncHandler(async (req, res) => {
+    const adminCheck = await Org.findOne({"admin": req.body.admin});
+    const UserAcc = await User.findOne({"email": req.body.email});
+    if(adminCheck && UserAcc==null){
+        const accounts = adminCheck.accounts;
+        if(!accounts.find(o => o.email == req.body.email)){
+        accounts.push({"email": req.body.email, "access_lvl": req.body.access_lvl});
+        adminCheck.accounts = accounts;}else{
+            res.status(400).send("Account already exists");
+        }
+        await adminCheck.save();
+        res.status(200).send("added");
+    }else{
+        res.status(400).send("Admin not found or user exists");
+    }   
+});
+
+// Remove Account
+// Tested
+const removeAccount = asyncHandler(async (req, res) => {
+    const adminCheck = await Org.findOne({"admin": req.body.admin});
+    const UserAcc = await User.findOne({"email": req.body.email});
+    if(adminCheck && UserAcc==null){
+        let accounts = adminCheck.accounts;
+        if(accounts.find(o => o.email == req.body.email)){
+            accounts = accounts.filter(function( obj ) {
+                return obj.email !== req.body.email;
+            });
+            console.log(accounts);
+            adminCheck.accounts = accounts;
+        }else{
+            res.status(400).send("Account do not exists");
+        }
+        await adminCheck.save();
+        res.status(200).send("removed");
+    }else{
+        res.status(400).send("Admin not found or user exists");
+    }   
+})
 
 // Exporting the functions
 module.exports = {
@@ -131,4 +193,7 @@ module.exports = {
     getOrg,
     deleteOrg,
     checkOtp,
+    addAccount,
+    UpdateAdmin,
+    removeAccount
 }
