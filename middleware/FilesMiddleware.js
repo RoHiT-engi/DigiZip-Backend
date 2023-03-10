@@ -152,5 +152,27 @@ const grantAccess = asyncHandler(async (req, res) => {
         res.status(400).send(e);
     }
 })
-module.exports = {addfile, getfiles, deleteFile, revokeaccess, getAccessFiles, grantAccess}
+
+// Edit File
+// tested
+const editFile = asyncHandler(async (req, res) => {
+    // res.header('Access-Control-Allow-Methods', 'PUT');
+    try{
+        const userExists = await User.findOne({"email": req.body.email});
+        const FileExist = await File.findOne({"CID": req.body.cid_old});
+        console.log(userExists+" "+FileExist);
+        if(userExists!=null && FileExist!=null){
+            FileExist.CID = req.body.cid_new;
+            FileExist.FileHash = req.body.FileHash;
+            FileExist.metadata.size = req.body.size;
+            await FileExist.save();
+            res.status(200).send("file edited");
+        }else{
+            res.status(400).send("file not found");
+        }
+    }catch(e){
+        res.status(400).send(e);
+    }
+})
+module.exports = {addfile,editFile, getfiles, deleteFile, revokeaccess, getAccessFiles, grantAccess}
 
