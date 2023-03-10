@@ -73,7 +73,7 @@ const checkotp = asyncHandler(async (req, res) => {
       const otp = req.body.otp;
       if(emailExist.otp == otp){
         emailExist.verified = true;
-        emailExist.save();
+        await emailExist.save();
         res.status(200).send('User verified');
       }else{
         res.status(400).send('Wrong otp');

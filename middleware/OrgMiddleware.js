@@ -70,7 +70,7 @@ const makeOrg = asyncHandler(async (req, res) => {
             res.status(400).send(e);
         }
     }else{
-        res.status(400).send("Admin already registered");
+        res.status(400).send("Admin already registered or its an User Account");
     }
 });
 
@@ -116,7 +116,7 @@ const deleteOrg = asyncHandler(async (req, res) => {
 const checkOtp = asyncHandler(async (req, res) => {
     try{
         const admin =await Org.findOne({"admin": req.body.admin});
-        if(admin){
+        if(admin){  
             if(admin.otp==req.body.otp){
                 admin.verified_admin = true;
                 await admin.save();

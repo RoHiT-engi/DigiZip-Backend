@@ -11,8 +11,7 @@ const addfile = asyncHandler(async (req, res) => {
   const CIDexist = await File.findOne({"CID": req.body.file_CID});
   const FileHash = await File.findOne({"FileHash": req.body.FileHash});
   const Email = await User.findOne({"email": req.body.email});
-    console.log(CIDexist);
-    if(CIDexist==null && FileHash==null && Email==null) {
+    if(CIDexist==null && FileHash==null && Email!=null) {
         const file = new File({
             email : req.body.email,
             CID : req.body.file_CID,
