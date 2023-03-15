@@ -18,6 +18,16 @@ const PresetSchema = new Mongoose.Schema({
         FileName :{
             type: String,
             ref: 'Preset',
+        },
+        accesstype :{
+            type: String,
+            ref: 'Preset',
+            default: 'read'
+        },
+        time: {
+            type: String,
+            ref: 'Preset',
+            default: 0
         }
     },
     Preset_name: {
@@ -26,16 +36,19 @@ const PresetSchema = new Mongoose.Schema({
         ref: 'Preset',
     },
     description: {
-        type: Array,
+        type: String,
         ref: 'Preset',
-        Key :{
-            type: String,
-            ref: 'Preset',
-        },
-        Value :{
-            type: String,
-            ref: 'Preset',
-        }
+        required: true,
+    },
+    orgHash: {
+        type: String,
+        ref: 'Preset',
+        required: true,
+    },
+    generated_hash_preset: {
+        type: String,
+        ref: 'Preset',
+        required: true,
     }
 },{
     timestamps: true,

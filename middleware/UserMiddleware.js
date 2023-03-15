@@ -36,8 +36,12 @@ const adduser = asyncHandler(async (req, res) => {
     var mailOptions = {
       from: process.env.EMAIL,
       to: req.body.email,
-      subject: 'This Mail is to verify the otp',
-      text: 'Your otp is '+otp
+      subject: 'One Time Password (OTP) for your DigiZip account',
+      html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
+      <br/><br/>Hi <b>${req.body.email.split('@')[0]},</b><br/><br/>
+        Use <b><u>${otp}</u></b> as One Time Password (OTP) for your DigiZip account. <br/><br/><br/><br/><br/>
+        Please do not share this OTP with anyone for security reasons. <br/>
+      </div>` 
     };
     
     try {

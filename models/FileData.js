@@ -6,7 +6,6 @@ const FileSchema = new Mongoose.Schema({
     email: {
         type: String,
         required: true,
-        unique: true,
         ref: 'File',
     },
     CID: {
