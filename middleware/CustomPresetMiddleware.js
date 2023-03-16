@@ -16,9 +16,9 @@ const addPreset = asyncHandler(async (req, res) => {
             .update(req.body.Preset_name)
             .update(req.body.orgHash)
             .digest('hex');
-        
         try {
-            const arr = preset.files;
+            const arr = req.body.files;
+            console.log(arr);
             for (let i = 0; i < arr.length; i++) {
                 const file = await File.findOne({"CID": arr[i].CID, "metadata.title": arr[i].FileName});
                 if(file!=null){
@@ -34,7 +34,7 @@ const addPreset = asyncHandler(async (req, res) => {
                 }else{
                     res.status(400).send("file not found with name "+arr[i].FileName+" and CID "+arr[i].CID+"");
                 }
-                arr.splice(i, 1);
+                // arr.splice(i, 1);
             }
             const preset = new Preset({
                 "email" : req.body.email,
