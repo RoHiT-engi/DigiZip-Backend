@@ -44,8 +44,6 @@ app.use('/file', require('./routes/File.js'));
 
 app.use('/preset', require('./routes/Preset.js'));
 
-app.use('/request', require('./routes/Request.js'));
-
 app.use('/org', require('./routes/Org.js'));
 
 app.get('/test',(req,res)=>{

@@ -46,8 +46,12 @@ const makeOrg = asyncHandler(async (req, res) => {
             var mailOptions = {
             from: process.env.EMAIL,
             to: req.body.admin,
-            subject: 'This Mail is to verify the otp',
-            text: 'Your otp is '+otp
+            subject: 'One Time Password (OTP) for your DigiZip account',
+            html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
+            <br/><br/>Hi <b>${req.body.admin.split('@')[0]},</b><br/><br/>
+                Use <b><u>${otp}</u></b> as One Time Password (OTP) for your DigiZip account. <br/><br/><br/><br/><br/>
+                Please do not share this OTP with anyone for security reasons. <br/>
+            </div>` 
             };
             
                 //VALIDATION OF USER INPUTS
@@ -98,7 +102,6 @@ const getOrg = asyncHandler(async (req, res) => {
 const deleteOrg = asyncHandler(async (req, res) => {
     try {
         const admin =await Org.findOne({"admin": req.query.admin});
-        console.log(admin);
         if(admin){
             await admin.delete();
             res.status(200).send("deleted");
@@ -133,13 +136,40 @@ const checkOtp = asyncHandler(async (req, res) => {
 });
 
 // Update Admin Email
-// Tested
+// NOt Tested
 const UpdateAdmin = asyncHandler(async (req, res) => {
     const oldad = await Org.findOne({"admin": req.body.oldadmin});
-    if(oldad){
+    const userexists = await User.findOne({"email": req.body.newadmin});
+    if(oldad && userexists==null){
         oldad.admin = req.body.newadmin;
-        await oldad.save();
-        res.status(200).send("updated");
+        oldad.verified_admin = false;
+        const otp = otpGenerator.generate(6, { digits: true });
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD
+            }
+            });
+        var mailOptions = {
+            from: process.env.EMAIL,
+            to: req.body.newadmin,
+            subject: 'One Time Password (OTP) for your DigiZip account',
+            html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
+            <br/><br/>Hi <b>${req.body.newadmin.split('@')[0]},</b><br/><br/>
+                Use <b><u>${otp}</u></b> as One Time Password (OTP) for your DigiZip account. <br/><br/><br/><br/><br/>
+                Please do not share this OTP with anyone for security reasons. <br/>
+            </div>` 
+        };
+        transporter.sendMail(mailOptions, async function(error, info){
+            if (error) {
+                res.status(400).send(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+                await oldad.save();
+                res.status(200).send("updated");
+            }
+        });
     }else{
         res.status(400).send("Admin not found");
     }
@@ -187,6 +217,47 @@ const removeAccount = asyncHandler(async (req, res) => {
     }   
 })
 
+
+// make request
+// not tested
+const makeRequest = asyncHandler(async (req, res) => {
+    const orgexist = await Org.findOne({"generated_hash": req.body.hash});
+    if(orgexist!=null){
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD
+            }
+        });
+        var mailOptions = {
+            from: process.env.EMAIL,
+            to: req.body.user,
+            subject: req.body.subject,
+            html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
+            <br/><br/>Hi <b>${req.body.user},</b><br/><br/>
+                ${req.body.message} <br/><br/><br/><br/><br/>
+                Organization Code : <b><u>${orgexist.generated_hash}</u></b> <br/>
+                Organization Name : <b><u>${orgexist.name}</u></b> <br/>
+                please share file on above code and name <br/>
+            </div>` 
+        };
+            
+                //VALIDATION OF USER INPUTS
+        transporter.sendMail(mailOptions, async function(error, info){
+            if (error) {
+                res.status(400).send(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+                res.status(200).send("sent");
+            }
+        })
+    }else{
+        res.status(400).send("org not found");
+    }
+});
+
+
 // Exporting the functions
 module.exports = {
     makeOrg,
@@ -195,5 +266,6 @@ module.exports = {
     checkOtp,
     addAccount,
     UpdateAdmin,
-    removeAccount
+    removeAccount,
+    makeRequest
 }

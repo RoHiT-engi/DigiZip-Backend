@@ -99,4 +99,21 @@ const getuser = asyncHandler(async (req, res) => {
     }
   });
 
-module.exports = {adduser, checkotp, getuser};
+// delete user
+// not tested 
+const deleteuser = asyncHandler(async (req, res) => {
+  try{
+    const getuser = await User.findOne({"_id": req.query.id});
+    // console.log(req.body.id);
+    if(getuser!=null){
+      await getuser.remove();
+      res.status(200).send('User deleted');
+    }else{
+      res.status(400).send('User do not exists');
+    }
+  }catch(err){
+    res.status(400).send(err);
+  }
+});
+
+module.exports = {adduser, checkotp, getuser,deleteuser};

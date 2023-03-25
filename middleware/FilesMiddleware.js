@@ -2,6 +2,7 @@ const File = require('../models/FileData');
 const User = require('../models/UserData');
 const Org = require('../models/Org');
 const asyncHandler = require('express-async-handler');
+const nodemailer = require('nodemailer');
 
 // AddFile
 // Tested
@@ -92,7 +93,6 @@ const revokeaccess = asyncHandler(async (req, res) => {
                     break;
                 }
             }
-            
             CIDexist.access = arr;
             await CIDexist.save();
             res.status(200).send("access revoked");
@@ -129,7 +129,6 @@ const grantAccess = asyncHandler(async (req, res) => {
         const org = await Org.findOne({"generated_hash": req.body.hash});
         const File_cid = await File.findOne({"CID": req.body.file_CID});
         const check = await File.findOne({"CID": req.body.file_CID,"access.org_hash": req.body.hash});
-        console.log(File_cid+" "+org);
         if(org!=null && File_cid!=null && check==null){
             var arr = File_cid.access;
             arr.push({
@@ -159,7 +158,6 @@ const editFile = asyncHandler(async (req, res) => {
     try{
         const userExists = await User.findOne({"email": req.body.email});
         const FileExist = await File.findOne({"CID": req.body.cid_old});
-        console.log(userExists+" "+FileExist);
         if(userExists!=null && FileExist!=null){
             FileExist.CID = req.body.cid_new;
             FileExist.FileHash = req.body.FileHash;

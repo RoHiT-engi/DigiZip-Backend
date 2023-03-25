@@ -4,7 +4,7 @@ const Org = require('../models/Org');
 const File = require('../models/FileData');
 const asyncHandler = require('express-async-handler');
 const crypto = require('crypto');
-
+const nodemailer = require('nodemailer');
 // Add Preset
 // Tested
 const addPreset = asyncHandler(async (req, res) => {
@@ -16,11 +16,28 @@ const addPreset = asyncHandler(async (req, res) => {
             .update(req.body.Preset_name)
             .update(req.body.orgHash)
             .digest('hex');
+
+        var transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: process.env.EMAIL,
+                pass: process.env.PASSWORD
+        }});
+            var mailOptions = {
+                from: process.env.EMAIL,
+                to: orgexist.admin,
+                subject: 'DigiZip - Access Granted to Files',
+                html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
+                <br/><br/>Hi <b>${orgexist.admin},</b><br/><br/>
+                <p>Access to the files has been granted to your organization with the preset name ${ req.body.Preset_name} by ${req.body.email}</p>
+                <p>Files are available at <a href="http://localhost:3000/">DigiZip</a></p>
+                <br/><br/><br/><br/><br/>
+                </div>` 
+            };
         try {
             const arr = req.body.files;
-            console.log(arr);
             for (let i = 0; i < arr.length; i++) {
-                const file = await File.findOne({"CID": arr[i].CID, "metadata.title": arr[i].FileName});
+                const file = await File.findOne({"CID": arr[i].CID});
                 if(file!=null){
                     file.access.push({
                         org_hash : req.body.orgHash,
@@ -36,27 +53,39 @@ const addPreset = asyncHandler(async (req, res) => {
                 }
                 // arr.splice(i, 1);
             }
-            const preset = new Preset({
-                "email" : req.body.email,
-                "Preset_name" : req.body.Preset_name,
-                "files" : req.body.files,
-                "description" : req.body.description,
-                "orgHash" : req.body.orgHash,
-                "generated_hash_preset" : hashValue
-            })
-            await preset.save();
-            res.status(200).send("preset created");
+            const presetExist = await Preset.findOne({"generated_hash_preset": hashValue});
+            if(presetExist==null){
+                transporter.sendMail(mailOptions, async function(error, info){
+                    if (error) {
+                      res.status(400).send(error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                      const preset = new Preset({
+                        "email" : req.body.email,
+                        "Preset_name" : req.body.Preset_name,
+                        "files" : req.body.files,
+                        "description" : req.body.description,
+                        "orgHash" : req.body.orgHash,
+                        "generated_hash_preset" : hashValue
+                        })
+                        await preset.save();
+                        res.status(200).send("preset created");
+                    }
+                  });
+            }else{
+                res.status(400).send("preset already exists");
+            }
         }catch(e){
             res.status(400).send(e);
         }
     }else{
-        res.status(400).send("Preset already exists");
+        res.status(400).send("Org does not exists or preset already exists");
     }
 })
 
 
 // Get all Presets
-// Not Tested
+// Tested
 const getallPreset = asyncHandler(async (req, res) => {
     try{
     const OrgHash = await Org.findOne({"generated_hash": req.query.orghash});
@@ -89,7 +118,7 @@ const getPresetByName = asyncHandler(async (req, res) => {
 })
 
 // Delete Preset by name
-// Tested
+// Not Tested
 const deletePreset = asyncHandler(async (req, res) => {
     try{
         // const Email = await User.findOne({"email": req.query.email});
@@ -100,12 +129,37 @@ const deletePreset = asyncHandler(async (req, res) => {
             for (let i = 0; i < getfiles.length; i++) {
                 const file = await File.findOne({"CID": getfiles[i].CID, "metadata.title": getfiles[i].FileName});
                 if(file!=null){
-                    file.access.splice(file.access.indexOf(file.access.find(x => x.org_hash == req.query.orghash)), 1);
+                    file.access.splice(file.access.indexOf(file.access.find(x => x.org_hash == Presetbyname.orgHash)), 1);
                     await file.save();
                 }
             }
-            await Presetbyname.deleteOne({"_id": Presetbyname._id});
-            res.status(200).send("Preset deleted");
+            var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL,
+                    pass: process.env.PASSWORD
+            }});
+                var mailOptions = {
+                    from: process.env.EMAIL,
+                    to: Presetbyname.email,
+                    subject: 'DigiZip - Deleting Preset Granted by you on '+Presetbyname.createdAt,
+                    html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
+                    <br/><br/>Hi <b>${Presetbyname.email},</b><br/><br/>
+                    <p>Access to the preset has been <b>rejected</b> by organization with the preset name ${ Presetbyname.Preset_name} </p>
+                    <p>Message from organization :<br/> ${req.query.des}</p>
+                    <br/><br/><br/><br/><br/>
+                    </div>` 
+                };
+            transporter.sendMail(mailOptions, async function(error, info){
+                if (error) {
+                  res.status(400).send(error);
+                } else {
+                  console.log('Email sent: ' + info.response);
+                  await Presetbyname.deleteOne({"_id": Presetbyname._id});
+                    res.status(200).send("Preset deleted");
+                }
+              })
+            
         }else{
             res.status(400).send("Preset not found");
         }}
@@ -114,4 +168,27 @@ const deletePreset = asyncHandler(async (req, res) => {
     }
 })
 
-module.exports = {addPreset, getallPreset, getPresetByName, deletePreset}
+// Remove a File from Preset
+// Tested
+const removeFileFromPreset = asyncHandler(async (req, res) => {
+    try{
+        const OrgHash = await Org.findOne({"generated_hash": req.query.orghash});
+        const getpreset = await Preset.findOne({"generated_hash_preset": req.query.prehash});
+        if(OrgHash!=null && getpreset!=null) {
+            const getfiles = getpreset.files;
+            for (let i = 0; i < getfiles.length; i++) {
+                if(getfiles[i].CID==req.query.CID){
+                    getfiles.splice(i, 1);
+                }
+            }
+            await getpreset.save();
+            res.status(200).send("File removed from preset");
+        }else{
+            res.status(400).send("Organization or Preset does not exists");
+        }
+    }catch(e){
+        res.status(400).send(e);
+    }
+})
+
+module.exports = {addPreset, getallPreset, getPresetByName, deletePreset,removeFileFromPreset}
