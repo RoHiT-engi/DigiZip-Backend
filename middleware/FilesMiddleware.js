@@ -193,19 +193,16 @@ const editFile = asyncHandler(async (req, res) => {
                                   res.status(400).send(error);
                                 } else {
                                   console.log('Email sent: ' + info.response);
-                            
-                                  preset.markModified('files');
-                                  await preset.save();
                                 }
                               })
                             break;
                         }
                     }
+                    preset.markModified('files');
+                    await preset.save();
                 }
-                preset.markModified('files');
-                await preset.save();
             }
-            // FileExist.markModified('CID')
+            FileExist.markModified('CID')
             await FileExist.save();
             res.status(200).send("file edited");
         }else{
