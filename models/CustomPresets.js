@@ -24,11 +24,11 @@ const PresetSchema = new Mongoose.Schema({
             ref: 'Preset',
             default: 'read'
         },
-        time: {
-            type: String,
-            ref: 'Preset',
-            default: 0
-        }
+    },
+    time: {
+        type: String,
+        ref: 'Preset',
+        default: 0
     },
     Preset_name: {
         type: String,

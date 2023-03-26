@@ -3,7 +3,7 @@ const User = require('../models/UserData');
 const Org = require('../models/Org');
 const asyncHandler = require('express-async-handler');
 const nodemailer = require('nodemailer');
-
+const Preset = require('../models/CustomPresets');
 // AddFile
 // Tested
 const addfile = asyncHandler(async (req, res) => {
@@ -162,6 +162,50 @@ const editFile = asyncHandler(async (req, res) => {
             FileExist.CID = req.body.cid_new;
             FileExist.FileHash = req.body.FileHash;
             FileExist.metadata.size = req.body.size;
+            const access = FileExist.access;
+            for(var i=0;i<access.length;i++){
+                const preset = await Preset.findOne({"generated_hash_preset": access[i].preset_hash});
+                if(preset!=null){
+                    const preset_access = preset.files;
+                    for(var j=0;j<preset_access.length;j++){
+                        if(preset_access[j].CID==req.body.cid_old){
+                            preset_access[j].CID = req.body.cid_new;
+                            preset.files = preset_access;
+                            var transporter = nodemailer.createTransport({
+                                service: 'gmail',
+                                auth: {
+                                    user: process.env.EMAIL,
+                                    pass: process.env.PASSWORD
+                            }});
+                            const getorg = await Org.findOne({"generated_hash": preset.orgHash});
+                                var mailOptions = {
+                                    from: process.env.EMAIL,
+                                    to: getorg.admin,
+                                    subject: 'Modification in Preset',
+                                    html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
+                                    <br/><br/>Hi <b>${getorg.admin},</b><br/><br/>
+                                    <b>${userExists.email}</b> has modified the file <b>${FileExist.metadata.title}</b> in the preset <b>${preset.Preset_name}</b> of your organization <b>${getorg.name}</b>.<br/><br/>
+                                    <br/><br/><br/><br/><br/>
+                                    </div>` 
+                                };
+                            transporter.sendMail(mailOptions, async function(error, info){
+                                if (error) {
+                                  res.status(400).send(error);
+                                } else {
+                                  console.log('Email sent: ' + info.response);
+                            
+                                  preset.markModified('files');
+                                  await preset.save();
+                                }
+                              })
+                            break;
+                        }
+                    }
+                }
+                preset.markModified('files');
+                await preset.save();
+            }
+            // FileExist.markModified('CID')
             await FileExist.save();
             res.status(200).send("file edited");
         }else{

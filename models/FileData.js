@@ -57,6 +57,11 @@ const FileSchema = new Mongoose.Schema({
             type: Boolean,
             ref: 'File',
             default: false
+        },
+        preset_hash :{
+            type: String,
+            ref: 'File',
+            default: 'Not Available'
         }
     },
     metadata: {

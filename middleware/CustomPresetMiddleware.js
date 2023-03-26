@@ -43,9 +43,10 @@ const addPreset = asyncHandler(async (req, res) => {
                         org_hash : req.body.orgHash,
                         read : arr[i].accesstype=="read"?true:false,
                         download : arr[i].accesstype=="download"?true:false,
-                        time : arr[i].time,
+                        time : req.body.time,
                         importance_lvl : "low",
-                        status : false
+                        status : false,
+                        preset_hash : hashValue
                     })
                     await file.save();
                 }else{
@@ -66,6 +67,7 @@ const addPreset = asyncHandler(async (req, res) => {
                         "files" : req.body.files,
                         "description" : req.body.description,
                         "orgHash" : req.body.orgHash,
+                        "time" : req.body.time,
                         "generated_hash_preset" : hashValue
                         })
                         await preset.save();
@@ -91,7 +93,55 @@ const getallPreset = asyncHandler(async (req, res) => {
     const OrgHash = await Org.findOne({"generated_hash": req.query.orghash});
     if(OrgHash!=null) {
         const Presets = await Preset.find({"orgHash": req.query.orghash});
-        res.status(200).send(Presets);
+        for (let index = 0; index <Presets.length; index++) {
+            const element = Presets[index];
+            const today = new Date();
+            const selected = new Date(element.time);
+            // console.log(element.time+" "+today);
+            if(selected<=today){
+            const files = element.files;
+            for (let i = 0; i < files.length; i++) {
+                const file = await File.findOne({"CID": files[i].CID});
+                if(file!=null){
+                    const access = file.access;
+                    for (let j = 0; j < access.length; j++) {
+                        const inner_element = access[j];
+                        if(inner_element.preset_hash==element.generated_hash_preset){
+                            access.splice(j, 1);
+                            break;
+                        }
+                    }
+                    file.access = access;
+                    await file.save();
+                }
+            }
+            var transporter = nodemailer.createTransport({
+                service: 'gmail',
+                auth: {
+                    user: process.env.EMAIL,
+                    pass: process.env.PASSWORD
+            }});
+                var mailOptions = {
+                    from: process.env.EMAIL,
+                    to: OrgHash.admin,
+                    subject: 'Your Access to Files has been Expired',
+                    html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
+                    <br/><br/>Hi <b>${OrgHash.admin},</b><br/><br/>
+                    <p>Your access to the files has been expired with the preset name ${ element.Preset_name} by ${element.email}</p>
+                    <br/><br/><br/><br/><br/>
+                    </div>` 
+                };
+            transporter.sendMail(mailOptions, async function(error, info){
+                if (error) {
+                    res.status(400).send(error);
+                } else {
+                    console.log('Email sent: ' + info.response);
+                    await element.delete();
+                }
+              })
+            }
+        }
+        res.status(200).send(await Preset.find({"orgHash": req.query.orghash}));
     }else{
         res.status(400).send("Organization does not exists");
     }}
@@ -129,7 +179,7 @@ const deletePreset = asyncHandler(async (req, res) => {
             for (let i = 0; i < getfiles.length; i++) {
                 const file = await File.findOne({"CID": getfiles[i].CID, "metadata.title": getfiles[i].FileName});
                 if(file!=null){
-                    file.access.splice(file.access.indexOf(file.access.find(x => x.org_hash == Presetbyname.orgHash)), 1);
+                    file.access.splice(file.access.indexOf(file.access.find(x => x.preset_hash == Presetbyname.generated_hash_preset)), 1);
                     await file.save();
                 }
             }
