@@ -22,7 +22,6 @@ const PresetSchema = new Mongoose.Schema({
         accesstype :{
             type: String,
             ref: 'Preset',
-            default: 'read'
         },
     },
     time: {

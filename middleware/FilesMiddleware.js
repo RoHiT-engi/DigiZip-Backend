@@ -84,11 +84,51 @@ const revokeaccess = asyncHandler(async (req, res) => {
     // console.log(res);
     try{
         const CIDexist = await File.findOne({"CID": req.body.cid});
-        const chash = await Org.findOne({"generated_hash": req.body.hash});
-        if( CIDexist!=null && chash!=null){
+        console.log(CIDexist);
+        if( CIDexist!=null){
             var arr = CIDexist.access;
             for(var i=0;i<arr.length;i++){
-                if(arr[i].org_hash==req.body.hash){
+                if(arr[i].preset_hash==req.body.hash){
+                    const preset = await Preset.findOne({"generated_hash_preset": req.body.hash});
+                    if(preset!=null){
+                        const files = preset.files;
+                        for(var j=0;j<files.length;j++){
+                            if(files[j].CID==req.body.cid){
+                                files.splice(j,1);
+                                break;
+                            }
+                        }
+
+                        preset.files = files;
+                        preset.markModified('files');
+                        const org = await Org.findOne({"generated_hash": preset.orgHash});
+                        var transporter = nodemailer.createTransport({
+                            service: 'gmail',
+                            auth: {
+                                user: process.env.EMAIL,
+                                pass: process.env.PASSWORD
+                            }
+                            });
+                            var mailOptions = {
+                            from: process.env.EMAIL,
+                            to: org.admin,
+                            subject: 'User Revoked Access to File '+CIDexist.metadata.title+' in DigiZip',
+                            html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
+                            <br/><br/>Hi <b>${org.admin.split('@')[0]},</b><br/><br/>
+                            <b>${CIDexist.email.split('@')[0]}</b> has revoked access to file <b>${CIDexist.metadata.title} from preset named ${preset.Preset_name}</b> in DigiZip.<br/><br/>
+                            </div>` 
+                            };
+                            
+                                //VALIDATION OF USER INPUTS
+                            transporter.sendMail(mailOptions, async function(error, info){
+                            if (error) {
+                                res.status(400).send(error);
+                            } else {
+                                console.log('Email sent: ' + info.response);
+                                await preset.save();
+                            }
+                            });
+                    }
                     arr.splice(i,1);
                     break;
                 }
