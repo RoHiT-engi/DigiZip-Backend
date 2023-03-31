@@ -30,7 +30,7 @@ const addPreset = asyncHandler(async (req, res) => {
                 html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
                 <br/><br/>Hi <b>${orgexist.admin},</b><br/><br/>
                 <p>Access to the files has been granted to your organization with the preset name ${ req.body.Preset_name} by ${req.body.email}</p>
-                <p>Files are available at <a href="http://localhost:3000/">DigiZip</a></p>
+                <p>Files are available at <a href="https://digizip.vercel.app/">DigiZip</a></p>
                 <br/><br/><br/><br/><br/>
                 </div>` 
             };

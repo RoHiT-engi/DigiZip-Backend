@@ -4,6 +4,7 @@ const nodemailer = require('nodemailer');
 const otpGenerator = require('otp-generator') ;
 const crypto = require('crypto');
 const User = require('../models/UserData');
+const Preset = require('../models/CustomPresets');
 
 // TODO : -
 
@@ -219,7 +220,7 @@ const removeAccount = asyncHandler(async (req, res) => {
 
 
 // make request
-// not tested
+// tested
 const makeRequest = asyncHandler(async (req, res) => {
     const orgexist = await Org.findOne({"generated_hash": req.body.hash});
     if(orgexist!=null){
@@ -257,6 +258,23 @@ const makeRequest = asyncHandler(async (req, res) => {
     }
 });
 
+// give user details
+// not tested
+const getOrgforuser = asyncHandler(async (req, res) => {
+    const orgexist = await Org.findOne({"generated_hash": req.query.hash});
+    const email = await User.findOne({"email": req.query.email});
+    if(orgexist!=null && email!=null){
+        const presets = await Preset.find({"orgHash": req.query.hash, "email": req.query.email});
+        const getdetails = {presets, orgdetails: {
+                "name": orgexist.name,
+                "admin": orgexist.admin,
+        }}
+        res.status(200).send(getdetails);
+    }else{
+        res.status(400).send("org not found");
+    }
+});
+
 
 // Exporting the functions
 module.exports = {
@@ -267,5 +285,6 @@ module.exports = {
     addAccount,
     UpdateAdmin,
     removeAccount,
-    makeRequest
+    makeRequest,
+    getOrgforuser
 }
