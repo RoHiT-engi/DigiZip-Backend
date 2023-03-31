@@ -57,7 +57,7 @@ const addPreset = asyncHandler(async (req, res) => {
                                 })
                                 await file.save();
                             }else{
-                                res.status(400).send("file not found with name "+arr[i].FileName+" and CID "+arr[i].CID+"");
+                                res.status(400).send("File not found with name "+arr[i].FileName+" and CID "+arr[i].CID+"");
                             }
                             // arr.splice(i, 1);
                         }
@@ -71,17 +71,17 @@ const addPreset = asyncHandler(async (req, res) => {
                         "generated_hash_preset" : hashValue
                         })
                         await preset.save();
-                        res.status(200).send("preset created");
+                        res.status(200).send("Preset created");
                     }
                   });
             }else{
-                res.status(400).send("preset already exists");
+                res.status(400).send("Preset already exists");
             }
         }catch(e){
             res.status(400).send(e);
         }
     }else{
-        res.status(400).send("Org does not exists or preset already exists");
+        res.status(400).send("Organization does not exists or preset already exists");
     }
 })
 
@@ -124,7 +124,7 @@ const getallPreset = asyncHandler(async (req, res) => {
                 var mailOptions = {
                     from: process.env.EMAIL,
                     to: OrgHash.admin,
-                    subject: 'Your Access to Files has been Expired',
+                    subject: 'Your access to files has been expired',
                     html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
                     <br/><br/>Hi <b>${OrgHash.admin},</b><br/><br/>
                     <p>Your access to the files has been expired with the preset name ${ element.Preset_name} by ${element.email}</p>
@@ -160,7 +160,7 @@ const getPresetByName = asyncHandler(async (req, res) => {
         const Presetbyname = await Preset.findOne({"email": req.query.email, "Preset_name": req.query.Preset_name});
         res.status(200).send(Presetbyname);
     }else{
-        res.status(400).send("user not found");
+        res.status(400).send("User not found");
     }}
     catch(e){
         res.status(400).send(e);
@@ -192,11 +192,11 @@ const deletePreset = asyncHandler(async (req, res) => {
                 var mailOptions = {
                     from: process.env.EMAIL,
                     to: Presetbyname.email,
-                    subject: 'DigiZip - Deleting Preset Granted by you on '+Presetbyname.createdAt,
+                    subject: 'DigiZip - Deleting preset granted by you on '+Presetbyname.createdAt,
                     html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
                     <br/><br/>Hi <b>${Presetbyname.email},</b><br/><br/>
                     <p>Access to the preset has been <b>rejected</b> by organization with the preset name ${ Presetbyname.Preset_name} </p>
-                    <p>Message from organization :<br/> ${req.query.des}</p>
+                    <p>Message from organization: <br/> ${req.query.des}</p>
                     <br/><br/><br/><br/><br/>
                     </div>` 
                 };
@@ -240,10 +240,10 @@ const removeFileFromPreset = asyncHandler(async (req, res) => {
                             var mailOptions = {
                                 from: process.env.EMAIL,
                                 to: file.email,
-                                subject: 'File has been removed from Preset',
+                                subject: 'File has been removed from preset',
                                 html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
                                 <br/><br/>Hi <b>${file.email},</b><br/><br/>
-                                <p>File has been removed from Preset by organization with the preset name ${ getpreset.Preset_name} </p>
+                                <p>File has been removed from preset by organization with the preset name: ${ getpreset.Preset_name} </p>
                                 <br/><br/><br/><br/><br/>
                                 </div>` 
                             };
@@ -263,7 +263,7 @@ const removeFileFromPreset = asyncHandler(async (req, res) => {
             await getpreset.save();
             res.status(200).send("File removed from preset");
         }else{
-            res.status(400).send("Organization or Preset does not exists");
+            res.status(400).send("Organization or preset does not exists");
         }
     }catch(e){
         res.status(400).send(e);

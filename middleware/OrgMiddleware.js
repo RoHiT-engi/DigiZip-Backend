@@ -87,12 +87,12 @@ const makeOrg = asyncHandler(async (req, res) => {
                     // }
             }
             });
-            res.status(200).send("request sent");
+            res.status(200).send("Request sent");
         }catch(e){
             res.status(400).send(e);
         }
     }else{
-        res.status(400).send("Admin already registered or its an User Account");
+        res.status(400).send("Admin already registered or it is an User account");
     }
 });
 
@@ -107,7 +107,7 @@ const getOrg = asyncHandler(async (req, res) => {
     }else if(checksub){
         res.status(200).send(checksub);
     }else{
-        res.status(400).send("org not found");
+        res.status(400).send("Organization not found");
     }}
     catch(e){
         res.status(400).send(e);
@@ -127,7 +127,7 @@ const deleteOrg = asyncHandler(async (req, res) => {
             await getkeyval.delete();
             res.status(200).send("deleted");
         }else{
-            res.status(400).send("user not found");
+            res.status(400).send("User not found");
         }
     } catch (e) {
         res.status(400).send(e);
@@ -144,12 +144,12 @@ const checkOtp = asyncHandler(async (req, res) => {
             if(admin.otp==req.body.otp){
                 admin.verified_admin = true;
                 await admin.save();
-                res.status(200).send("verified");
+                res.status(200).send("Verified");
             }else{
-                res.status(400).send("otp not matched");
+                res.status(400).send("OTP not matched");
             }
         }else{
-            res.status(400).send("user not found");
+            res.status(400).send("User not found");
         }
     }catch(e){
         res.status(400).send(e);
@@ -188,7 +188,7 @@ const UpdateAdmin = asyncHandler(async (req, res) => {
             } else {
                 console.log('Email sent: ' + info.response);
                 await oldad.save();
-                res.status(200).send("updated");
+                res.status(200).send("Updated");
             }
         });
     }else{
@@ -211,7 +211,7 @@ const addAccount = asyncHandler(async (req, res) => {
         await adminCheck.save();
         res.status(200).send("added");
     }else{
-        res.status(400).send("Admin not found or user exists");
+        res.status(400).send("Admin not found or User exists");
     }   
 });
 
@@ -229,12 +229,12 @@ const removeAccount = asyncHandler(async (req, res) => {
             console.log(accounts);
             adminCheck.accounts = accounts;
         }else{
-            res.status(400).send("Account do not exists");
+            res.status(400).send("Account does not exists");
         }
         await adminCheck.save();
-        res.status(200).send("removed");
+        res.status(200).send("Removed");
     }else{
-        res.status(400).send("Admin not found or user exists");
+        res.status(400).send("Admin not found or User exists");
     }   
 })
 
@@ -260,7 +260,7 @@ const makeRequest = asyncHandler(async (req, res) => {
                 ${req.body.message} <br/><br/><br/><br/><br/>
                 Organization Code : <b><u>${orgexist.generated_hash}</u></b> <br/>
                 Organization Name : <b><u>${orgexist.name}</u></b> <br/>
-                please share file on above code and name <br/>
+                Please share file on above code with following name. <br/>
             </div>` 
         };
             
@@ -274,7 +274,7 @@ const makeRequest = asyncHandler(async (req, res) => {
             }
         })
     }else{
-        res.status(400).send("org not found");
+        res.status(400).send("Organization not found");
     }
 });
 
@@ -291,7 +291,7 @@ const getOrgforuser = asyncHandler(async (req, res) => {
         }}
         res.status(200).send(getdetails);
     }else{
-        res.status(400).send("org not found");
+        res.status(400).send("Organization not found");
     }
 });
 

@@ -28,12 +28,12 @@ const addfile = asyncHandler(async (req, res) => {
         })
         try {
             await file.save();
-            res.status(200).send("file created");
+            res.status(200).send("File created");
         }catch(e){
             res.status(400).send(e);
         }
     }else{
-        res.status(400).send("file already exists");
+        res.status(400).send("File already exists");
     }
 
 })
@@ -48,7 +48,7 @@ const getfiles = asyncHandler(async (req, res) => {
         const CIDexist = await File.find({"email": req.query.email});
         res.status(200).send(CIDexist);
     }else{
-        res.status(400).send("file not found");
+        res.status(400).send("File not found");
     }}
     catch(e){
         res.status(400).send(e);
@@ -65,12 +65,12 @@ const deleteFile = asyncHandler(async (req, res) => {
     if(email!=null && FileTitle!=null){
         try{
             await File.deleteOne({"_id": FileTitle[0]._id});
-            res.status(200).send("file deleted");
+            res.status(200).send("File deleted");
         }catch(e){  
             res.status(400).send(e);
         }
     }else{
-        res.status(400).send("file not found");
+        res.status(400).send("File not found");
     }}
     catch(e){
         res.status(400).send(e);
@@ -112,7 +112,7 @@ const revokeaccess = asyncHandler(async (req, res) => {
                             var mailOptions = {
                             from: process.env.EMAIL,
                             to: org.admin,
-                            subject: 'User Revoked Access to File '+CIDexist.metadata.title+' in DigiZip',
+                            subject: 'User revoked access to file '+CIDexist.metadata.title+' in DigiZip',
                             html: `<div style={{paddingLeft:'20vw', paddingTop:'10vh'}}>
                             <br/><br/>Hi <b>${org.admin.split('@')[0]},</b><br/><br/>
                             <b>${CIDexist.email.split('@')[0]}</b> has revoked access to file <b>${CIDexist.metadata.title} from preset named ${preset.Preset_name}</b> in DigiZip.<br/><br/>
@@ -135,9 +135,9 @@ const revokeaccess = asyncHandler(async (req, res) => {
             }
             CIDexist.access = arr;
             await CIDexist.save();
-            res.status(200).send("access revoked");
+            res.status(200).send("Access revoked");
         }else{
-            res.status(400).send("file not found");
+            res.status(400).send("File not found");
         }
     }catch(e){
         res.status(400).send(e);
@@ -154,7 +154,7 @@ const getAccessFiles = asyncHandler(async (req, res) => {
         if(org!=null && File_cid!=null){
             res.status(200).send(File_cid);
         }else{
-            res.status(400).send("file not found");
+            res.status(400).send("File not found");
         }
     }catch(e){
         res.status(400).send(e);
@@ -181,9 +181,9 @@ const grantAccess = asyncHandler(async (req, res) => {
             });
             File_cid.access = arr;
             await File_cid.save();
-            res.status(200).send("access granted");
+            res.status(200).send("Access granted");
         }else{
-            res.status(400).send("file not found or access already granted");
+            res.status(400).send("File not found or access already granted");
         }
 
     }catch(e){
@@ -244,9 +244,9 @@ const editFile = asyncHandler(async (req, res) => {
             }
             FileExist.markModified('CID')
             await FileExist.save();
-            res.status(200).send("file edited");
+            res.status(200).send("File edited");
         }else{
-            res.status(400).send("file not found");
+            res.status(400).send("File not found");
         }
     }catch(e){
         res.status(400).send(e);

@@ -57,7 +57,7 @@ const adduser = asyncHandler(async (req, res) => {
             //   res.status(400).send(error.details[0].message);
             // }  else {
               await user.save();
-              res.status(200).send("user created");
+              res.status(200).send("User created");
             // }
           }
         });
@@ -65,7 +65,7 @@ const adduser = asyncHandler(async (req, res) => {
     } catch (error) {
         res.status(400).send(error);
     }}else{
-      res.status(400).send(isorg?'This account is already in Use':'Email or aadhar already exists');
+      res.status(400).send(isorg?'This account is already in use':'Email or Aadhar already exists');
     }
 });
 
@@ -80,10 +80,10 @@ const checkotp = asyncHandler(async (req, res) => {
         await emailExist.save();
         res.status(200).send('User verified');
       }else{
-        res.status(400).send('Wrong otp');
+        res.status(400).send('Wrong OTP');
       }
     }else{
-      res.status(400).send('User do not exists');
+      res.status(400).send('User does not exists');
     }
 });
 
@@ -95,7 +95,7 @@ const getuser = asyncHandler(async (req, res) => {
     if(user!=null){
       res.status(200).send(user);
     }else{
-      res.status(400).send('User do not exists');
+      res.status(400).send('User does not exists');
     }
   });
 
@@ -109,7 +109,7 @@ const deleteuser = asyncHandler(async (req, res) => {
       await getuser.remove();
       res.status(200).send('User deleted');
     }else{
-      res.status(400).send('User do not exists');
+      res.status(400).send('User does not exists');
     }
   }catch(err){
     res.status(400).send(err);
