@@ -5,7 +5,7 @@ const otpGenerator = require('otp-generator') ;
 const crypto = require('crypto');
 const User = require('../models/UserData');
 const Preset = require('../models/CustomPresets');
-
+const KeyValueHash = require('../models/KeyValueOrgHash');
 // TODO : -
 
 
@@ -14,12 +14,24 @@ const Preset = require('../models/CustomPresets');
 // Tested
 const makeOrg = asyncHandler(async (req, res) => {
     const useracc = await User.findOne({"email": req.body.admin});
-    const hash = crypto.createHash('sha256', req.body.name)
+    const rawhash = crypto.createHash('sha256', req.body.name)
     .update(req.body.gst_no)
     .update(req.body.admin)
     .digest('hex');
-    const generatedHash = await Org.findOne({"generated_hash": hash});
-    console.log(useracc);
+    let hash = "";
+    let x = 1;
+    let generate = Math.random().toString(36).slice(6);
+    while (x>0) {
+        const ifexist = await KeyValueHash.findOne({random_key: generate});
+        const checkrandom = await Org.findOne({"generated_hash": hash});
+        console.log(ifexist+" hihi "+checkrandom);
+        if(ifexist==null && checkrandom==null) {
+            hash = generate;
+            break;
+        }
+        generate = Math.random().toString(36).slice(6)
+    }
+    const generatedHash = await KeyValueHash.findOne({"org_hash": rawhash});
     if(generatedHash==null && useracc==null) {
         try{
             const hashValue = crypto.createHash('sha256', req.body.name)
@@ -34,7 +46,7 @@ const makeOrg = asyncHandler(async (req, res) => {
                 "accounts": [],
                 "verified_admin": false,
                 "verified_org": false,
-                "generated_hash": hashValue,
+                "generated_hash": hash,
                 "otp": otp
             })
             var transporter = nodemailer.createTransport({
@@ -66,6 +78,11 @@ const makeOrg = asyncHandler(async (req, res) => {
                     // if (error) {
                     //   res.status(400).send(error.details[0].message);
                     // }  else {
+                const createkeyvalue = new KeyValueHash({
+                    "org_hash": hashValue,
+                    "random_key": hash
+                });
+                await createkeyvalue.save();
                 await adder.save();
                     // }
             }
@@ -103,8 +120,11 @@ const getOrg = asyncHandler(async (req, res) => {
 const deleteOrg = asyncHandler(async (req, res) => {
     try {
         const admin =await Org.findOne({"admin": req.query.admin});
+
         if(admin){
             await admin.delete();
+            const getkeyval = await KeyValueHash.findOne({"random_key": admin.generated_hash});
+            await getkeyval.delete();
             res.status(200).send("deleted");
         }else{
             res.status(400).send("user not found");
